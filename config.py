@@ -1,6 +1,6 @@
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from dotenv import load_dotenv
 from pathlib import Path
 import os
@@ -14,15 +14,24 @@ APP_FILES_FOLDER_NAME: str = 'app-files'
 ALLOWED_EXTENSIONS: set[str] = {'png', 'jpg', 'jpeg', 'gif', 'jfif'}
 
 class DbSettings(BaseModel):
-    SQLALCHEMY_DATABASE_URI: str = os.environ.get('DATABASE_URL') or 'sqlite:///:memory:'
+    SQLALCHEMY_DATABASE_URI: str = Field(
+        default='sqlite:///:memory:',
+        env='DATABASE_URL'
+    )
     SQLALCHEMY_TRACK_MODIFICATIONS: bool = False
 
-    UPLOAD_FOLDER: Path = BASE_DIR / "app" / FILES_FOLDER_NAME
-    APP_FILES: Path = BASE_DIR / "app" / APP_FILES_FOLDER_NAME
+    UPLOAD_FOLDER: Path = Field(
+        default=BASE_DIR / "app" / FILES_FOLDER_NAME,
+        env='UPLOAD_FOLDER'
+    )
+    APP_FILES: Path = Field(
+        default=BASE_DIR / "app" / APP_FILES_FOLDER_NAME,
+        env='APP_FILES'
+    )
 
 class JWT(BaseModel):
-    PRIVATE_KEY: Path = BASE_DIR / "certs" / "private.pem"
-    PUBLIC_KEY: Path = BASE_DIR / "certs" / "public.pem"
+    PRIVATE_KEY: Path = Path(os.getenv("JWT_PRIVATE_KEY_PATH", "/etc/secrets/private.pem"))
+    PUBLIC_KEY: Path = Path(os.getenv("JWT_PUBLIC_KEY_PATH", "/etc/secrets/public.pem"))
     ALGORITHM: str = 'RS256'
     JWT_ACCESS_TOKEN_EXPIRES: int = int(os.environ.get('JWT_ACCESS_TOKEN_EXPIRES_MINUTES'))
     JWT_REFRESH_TOKEN_EXPIRES: int = int(os.environ.get('JWT_REFRESH_TOKEN_EXPIRES_MINUTES'))
@@ -32,7 +41,7 @@ class App(BaseModel):
 
 class Settings(BaseSettings):
     SECRET_KEY: str
-    DEBUG: bool = True
+    DEBUG: bool = False
     TESTING: bool = False
 
     db: DbSettings = DbSettings()
