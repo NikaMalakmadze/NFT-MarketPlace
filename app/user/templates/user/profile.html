@@ -1,0 +1,207 @@
+{% extends "base.html" %} {% block pageTitle %}{{ user.username }}{% endblock
+pageTitle %} {% block head %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('user.static', filename='user/css/profile.min.css') }}"
+/>
+<script
+  src="{{ url_for('user.static', filename='user/js/profile.min.js') }}"
+  type="module"
+></script>
+<script
+  src="{{ url_for('main.static', filename='main/js/useAuth.min.js') }}"
+  type="module"
+></script>
+<link
+  href="https://unpkg.com/gridjs/dist/theme/mermaid.min.css"
+  rel="stylesheet"
+/>
+<script src="https://unpkg.com/gridjs/dist/gridjs.umd.js"></script>
+{% endblock head %} {% block content %}
+<section class="profile">
+  <section class="profile__banner-section">
+    <div class="profile__banner-container">
+      <div class="profile__banner" aria-label="Profile banner">
+        <img src="{{ url_for('user.get_bg_image', user_id=user.id) }}" alt="" />
+      </div>
+      <div class="profile__avatar">
+        <img
+          src="{{ url_for('user.get_logo_image', user_id=user.id) }}"
+          alt="User profile picture"
+        />
+      </div>
+    </div>
+  </section>
+
+  <section class="profile__info-section">
+    <div class="profile__info-container">
+      <div class="profile__info">
+        <div class="profile__username-container">
+          <h1 class="profile__username">{{ user.username }}</h1>
+          {% if user.role == 'admin' %}
+          <div class="profile__verification">
+            <div class="profile__verification-icon"></div>
+            <span class="profile__verification-text">Admin</span>
+          </div>
+          {% endif %}
+        </div>
+
+        <div class="profile__stats">
+          <div class="profile__stat-badge">
+            {{ user.get_follower_users()|count }} Followers
+          </div>
+          <div class="profile__stat-badge">
+            {{ user.get_following_users()|count }} Following
+          </div>
+        </div>
+
+        <p class="profile__bio">
+          {% if user.bio == None %} No Description {% else %} {{ user.bio }} {%
+          endif %}
+        </p>
+      </div>
+
+      <div class="profile__actions">
+        {% if not current_user or current_user.id != user.id %}
+
+        <div class="profile__follow">
+          {% if not current_user.is_anonymous %} {% if
+          current_user.is_following(user) %}
+          <form
+            method="POST"
+            action="{{ url_for('user.unfollow_user', user_id=user.id) }}"
+          >
+            <button
+              class="profile__follow-button profile__follow-button--unfollow"
+            >
+              Unfollow
+            </button>
+          </form>
+          {% else %}
+          <form
+            method="POST"
+            action="{{ url_for('user.follow_user', user_id=user.id) }}"
+          >
+            <button
+              class="profile__follow-button profile__follow-button--follow"
+            >
+              Follow
+            </button>
+          </form>
+          {% endif %} {% endif %}
+        </div>
+        {% else %}
+        <a href="{{ url_for('user.update_profile_page', user_id=user.id) }}">
+          <button class="profile__edit-button">Edit Profile</button>
+        </a>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+
+  <section class="gallery">
+    <div class="gallery__container">
+      <div class="gallery__tabs">
+        <div class="gallery__tabs-container">
+          <div class="gallery__tabs-line"></div>
+          <div class="gallery__tabs-list">
+            <button class="gallery__tab" data-tabId="1" data-tab="owned">
+              Collected
+            </button>
+            <button class="gallery__tab" data-tabId="2" data-tab="created">
+              Created
+            </button>
+            {% if current_user.id == user.id %}
+            <button class="gallery__tab" data-tabId="3" data-tab="offers">
+              Offers made
+            </button>
+            <button class="gallery__tab" data-tabId="4" data-tab="deals">
+              Deals
+            </button>
+            <button class="gallery__tab" data-tabId="5" data-tab="liked">
+              Favorited
+            </button>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery__controls">
+        <div class="gallery__filters">
+          <div class="gallery__search">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M21 21L15.8033 15.8033M15.8033 15.8033C17.1605 14.4461 18 12.5711 18 10.5C18 6.35786 14.6421 3 10.5 3C6.35786 3 3 6.35786 3 10.5C3 14.6421 6.35786 18 10.5 18C12.5711 18 14.4461 17.1605 15.8033 15.8033Z"
+                stroke="#6D667F"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+            <input
+              type="text"
+              placeholder="Search by name"
+              class="gallery__search-input"
+            />
+          </div>
+        </div>
+        <div class="gallery__view-options">
+          <div class="gallery__sort">
+            <button class="gallery__sort-button">
+              <span>Most Popular</span>
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M6 9L12 15L18 9"
+                  stroke="#24222A"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>
+
+            <div class="gallery__sort-dropdown" style="display: none">
+              <ul class="gallery__sort-list">
+                <li class="gallery__sort-item" data-sortid="1">Most Popular</li>
+                <li class="gallery__sort-item" data-sortid="2">
+                  Price: Low to High
+                </li>
+                <li class="gallery__sort-item" data-sortid="3">
+                  Price: High to Low
+                </li>
+                <li class="gallery__sort-item" data-sortid="4">Oldest</li>
+                <li class="gallery__sort-item" data-sortid="5">Newest</li>
+                <li class="gallery__sort-item" data-sortid="6">Most Viewed</li>
+                <li class="gallery__sort-item" data-sortid="7">Most Liked</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery__items"></div>
+      <div id="categoryLoader" class="loader-container" style="display: none">
+        <div class="loader">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <p class="loading-text">Loading NFTs...</p>
+      </div>
+    </div>
+  </section>
+</section>
+{% endblock content %}

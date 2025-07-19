@@ -1,0 +1,168 @@
+{% extends 'base.html' %} {% block pageTitle %}Login{% endblock pageTitle %} {%
+block head %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('main.static', filename='main/css/user-entry.min.css') }}"
+/>
+<script
+  src="{{ url_for('main.static', filename='main/js/user-entry.min.js') }}"
+  defer
+></script>
+<script
+  src="{{ url_for('main.static', filename='main/js/login.min.js') }}"
+  defer
+></script>
+{% endblock head %} {% block content %}
+<section class="user-entry">
+  <div class="user-entry__bg-wrapper">
+    <img
+      src="{{ url_for('main.static', filename='main/images/background.jpg') }}"
+      alt=""
+    />
+  </div>
+  <div class="container">
+    <h1 class="user-entry__title">Login To Account</h1>
+    <div class="user-entry__form-wrapper">
+      <div class="user-entry__form-box">
+        <div class="user-entry__form-box-info">
+          <h3 class="user-entry__form-box-title">The Community Missed You</h3>
+          <h4 class="user-entry__form-box-subtitle">
+            Ready to trade, mint, and explore? Log in to access your
+            collections, connect your wallet, and rejoin the Web3 creator
+            economy.
+          </h4>
+          <div class="user-entry__form-box-highlights-wrapper">
+            <div class="user-entry__form-box-highlight-wrapper">
+              <svg class="user-entry__form-box-highlight-icon">
+                <use
+                  href="{{ url_for('static', filename='images/icons.svg') }}#image"
+                ></use>
+              </svg>
+              <p class="user-entry__form-box-highlight-text">
+                <span class="highlight-text__important">$300+</span> million in
+                NFT trading volume
+              </p>
+            </div>
+            <div class="user-entry__form-box-highlight-wrapper">
+              <svg class="user-entry__form-box-highlight-icon">
+                <use
+                  href="{{ url_for('static', filename='images/icons.svg') }}#exchange"
+                ></use>
+              </svg>
+              <p class="user-entry__form-box-highlight-text">
+                <span class="highlight-text__important">$50+</span> million in
+                creator earnings
+              </p>
+            </div>
+            <div class="user-entry__form-box-highlight-wrapper">
+              <svg class="user-entry__form-box-highlight-icon">
+                <use
+                  href="{{ url_for('static', filename='images/icons.svg') }}#people"
+                ></use>
+              </svg>
+              <p class="user-entry__form-box-highlight-text">
+                <span class="highlight-text__important">200K+</span> collectors
+                across the globe
+              </p>
+            </div>
+          </div>
+        </div>
+        <form class="user-entry__form" id="loginForm">
+          <div class="user-entry__form-field">
+            <label for="mail" class="form-label">Email</label>
+            <input
+              type="mail"
+              class="form-control"
+              id="mail"
+              name="mail"
+              placeholder="e.g:CryptoManiac@gmail.com"
+              data-category="login"
+              required
+            />
+          </div>
+          <div class="user-entry__form-field">
+            <label for="username" class="form-label">Username</label>
+            <input
+              type="text"
+              class="form-control"
+              id="username"
+              name="username"
+              placeholder="e.g:cryptomaniac474"
+              data-category="login"
+              required
+            />
+          </div>
+          <div class="user-entry__form-field">
+            <label for="password" class="form-label">Password</label>
+            <input
+              type="password"
+              class="form-control"
+              id="password"
+              name="password"
+              placeholder="e.g:YourSuperSecretPassword123"
+              data-category="login"
+              required
+            />
+          </div>
+          <div class="user-entry__form-field">
+            <label for="repeatPassword" class="form-label"
+              >Repeat Password</label
+            >
+            <input
+              type="password"
+              class="form-control"
+              id="repeatPassword"
+              name="repeatPassword"
+              placeholder="e.g:YourSuperSecretPassword123"
+              data-category="login"
+              required
+            />
+          </div>
+
+          <p class="form-error hidden" id="loginError"></p>
+
+          <button type="submit" class="btn">
+            <div class="btn__text">Sign In</div>
+          </button>
+        </form>
+      </div>
+    </div>
+    <h3 class="user-entry__subtitle">
+      Don't have Account?
+      <a href="{{ url_for('main.connect') }}">
+        <span class="user-entry__highlight">SignUp</span>
+      </a>
+    </h3>
+    <div
+      class="scroll__wrapper"
+      style="--items: 8; --item-size: 480px"
+      id="scroll1"
+    >
+      <div class="scroll__item" style="--nomer: 1">
+        <span class="scroll__item-text">Grow Your Audience</span>
+      </div>
+      <div class="scroll__item" style="--nomer: 2">
+        <span class="scroll__item-text">Explore the Market</span>
+      </div>
+      <div class="scroll__item" style="--nomer: 3">
+        <span class="scroll__item-text">List a New Drop</span>
+      </div>
+      <div class="scroll__item" style="--nomer: 4">
+        <span class="scroll__item-text">Grow Your Audience</span>
+      </div>
+      <div class="scroll__item" style="--nomer: 5">
+        <span class="scroll__item-text">Explore the Market</span>
+      </div>
+      <div class="scroll__item" style="--nomer: 6">
+        <span class="scroll__item-text">List a New Drop</span>
+      </div>
+      <div class="scroll__item" style="--nomer: 7">
+        <span class="scroll__item-text">Grow Your Audience</span>
+      </div>
+      <div class="scroll__item" style="--nomer: 8">
+        <span class="scroll__item-text">Explore the Market</span>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock content %}

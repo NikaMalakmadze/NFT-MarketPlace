@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block pageTitle %}{% endblock pageTitle %}</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/base.min.css') }}"
+    />
+    {% if current_user.is_authenticated %}
+    <script
+      src="{{ url_for('static', filename='js/logged.min.js') }}"
+      type="module"
+    ></script>
+    {% else %}
+    <script
+      src="{{ url_for('static', filename='js/guest.min.js') }}"
+      type="module"
+    ></script>
+    <style>
+      .burger-icon {
+        display: none;
+        cursor: pointer;
+      }
+
+      .bar1,
+      .bar2,
+      .bar3 {
+        display: block;
+        width: 25px;
+        height: 3px;
+        margin: 6px 0;
+        background-color: #333;
+        border-radius: 4px;
+        transition: 0.4s;
+      }
+
+      .change .bar1 {
+        transform: rotateZ(45deg) translateY(7px) translateX(5px);
+      }
+
+      .change .bar2 {
+        opacity: 0;
+      }
+
+      .change .bar3 {
+        transform: rotateZ(-45deg) translateY(-8px) translateX(5px);
+      }
+
+      @media (max-width: 1150px) {
+        .header__info-logo-text {
+          display: none;
+        }
+      }
+
+      @media (max-width: 950px) {
+        #connectwalletIcon {
+          display: block;
+        }
+
+        #connectwalletIcon path {
+          fill: var(--greyscale-surface-white);
+        }
+
+        #connectWalletText {
+          display: none;
+        }
+
+        .header__wallet-wrapper .btn {
+          padding: 10px 11px;
+        }
+      }
+
+      @media (max-width: 850px) {
+        .header__info-nav {
+          margin-left: 15px;
+        }
+      }
+
+      @media (max-width: 800px) {
+        .header__searchbar-input-wrapper,
+        .header__searchbar-slash-wrapper {
+          display: none;
+        }
+
+        .header__searchbar {
+          width: fit-content;
+          padding: 5px 10px;
+          margin-left: auto;
+          margin-right: 20px;
+        }
+      }
+
+      @media (max-width: 400px) {
+        .header__info-nav-list {
+          display: none;
+        }
+
+        .header__wallet-wrapper {
+          display: none;
+        }
+
+        .header__searchbar {
+          margin-right: 10px;
+        }
+
+        .burger-icon {
+          display: inline-block;
+          position: relative;
+          z-index: 2;
+        }
+
+        .header__info-nav {
+          position: absolute;
+          max-width: unset;
+          width: 100%;
+          height: 100vh;
+          top: 0;
+          left: 0;
+          margin: 0;
+          padding: 20px;
+          z-index: 1;
+          display: flex;
+          flex-direction: column-reverse;
+          justify-content: flex-end;
+          overflow: hidden;
+          background: rgba(255, 255, 255, 0.1);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+          border: 1px solid rgba(255, 255, 255, 0.3);
+          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1),
+            inset 0 1px 0 rgba(255, 255, 255, 0.5),
+            inset 0 -1px 0 rgba(255, 255, 255, 0.1),
+            inset 0 0 0px 0px rgba(255, 255, 255, 0);
+          transform: translateY(-100vh);
+          transition: transform 0.6s ease;
+        }
+
+        .header__info-nav.opened {
+          transform: translateY(0);
+        }
+
+        .header__info-nav::before {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 1px;
+          background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.8),
+            transparent
+          );
+        }
+
+        .header__info-nav::after {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 1px;
+          height: 100%;
+          background: linear-gradient(
+            180deg,
+            rgba(255, 255, 255, 0.8),
+            transparent,
+            rgba(255, 255, 255, 0.3)
+          );
+        }
+
+        .header__info-nav-list {
+          margin-top: auto;
+          display: flex;
+          flex-direction: column;
+        }
+
+        .header__wallet-wrapper {
+          margin-top: 25px;
+          margin-bottom: auto;
+          display: flex;
+          justify-content: center;
+        }
+
+        .header__wallet-wrapper .btn {
+          padding: 8px 16px;
+          display: flex;
+          flex-direction: row-reverse;
+          align-items: center;
+          gap: 10px;
+        }
+
+        #connectWalletText {
+          display: block;
+        }
+      }
+    </style>
+    {% endif %} {% block head %}{% endblock head %}
+  </head>
+  <body>
+    <section class="app">
+      <header class="header">
+        <div class="container">
+          <div class="header__info-wrapper">
+            <a href="{{ url_for('main.index_page') }}">
+              <div class="header__info-logo-wrapper">
+                <img
+                  src="{{ url_for('static', filename='images/Logo.png') }}"
+                  alt="Site Logo"
+                />
+                <span class="header__info-logo-text">bytecraft</span>
+              </div>
+            </a>
+            <nav class="header__info-nav">
+              <ul class="header__info-nav-list">
+                <li class="header__ingo-nav-item">
+                  <a href="{{ url_for('main.drops_page') }}" class="nav-btn"
+                    >Drops</a
+                  >
+                </li>
+                <li class="header__ingo-nav-item">
+                  <a
+                    href="{{ url_for('user.create_nft_page') }}"
+                    class="nav-btn"
+                    >Create</a
+                  >
+                </li>
+              </ul>
+            </nav>
+          </div>
+          <div class="header__search">
+            <button class="search-trigger" id="searchTrigger">
+              <svg
+                class="search-trigger__icon"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <circle cx="11" cy="11" r="8"></circle>
+                <polyline points="21 21 16.65 16.65"></polyline>
+              </svg>
+              <span class="search-trigger__text"
+                >Search NFTs, collections, users...</span
+              >
+              <kbd class="search-trigger__shortcut">⌘K</kbd>
+            </button>
+          </div>
+          <div class="header__wallet-wrapper">
+            {% if not current_user.is_authenticated %}
+            <a href="{{ url_for('main.connect') }}">
+              <button class="btn">
+                <span class="btn__text" id="connectWalletText"
+                  >Connect Wallet</span
+                >
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  id="connectwalletIcon"
+                >
+                  <path
+                    d="M21.5999 16.5601V17.5601C22.1522 17.5601 22.5999 17.1124 22.5999 16.5601H21.5999ZM21.5999 11.2801H22.5999C22.5999 10.7279 22.1522 10.2801 21.5999 10.2801V11.2801ZM7.13914 6.11896C6.67457 6.41761 6.54007 7.03633 6.83872 7.5009C7.13738 7.96547 7.75609 8.09997 8.22066 7.80132L7.13914 6.11896ZM14.3999 2.64014L15.1893 2.0262C14.8715 1.61765 14.2945 1.51908 13.8591 1.79896L14.3999 2.64014ZM16.9705 7.57408C17.3096 8.01003 17.9379 8.08856 18.3738 7.74949C18.8098 7.41042 18.8883 6.78214 18.5493 6.3462L16.9705 7.57408ZM21.5999 15.5601H18.4799V17.5601H21.5999V15.5601ZM18.4799 12.2801H21.5999V10.2801H18.4799V12.2801ZM20.5999 11.2801V16.5601H22.5999V11.2801H20.5999ZM16.8399 13.9201C16.8399 13.0144 17.5742 12.2801 18.4799 12.2801V10.2801C16.4696 10.2801 14.8399 11.9098 14.8399 13.9201H16.8399ZM18.4799 15.5601C17.5742 15.5601 16.8399 14.8259 16.8399 13.9201H14.8399C14.8399 15.9305 16.4696 17.5601 18.4799 17.5601V15.5601ZM8.22066 7.80132L14.9407 3.48132L13.8591 1.79896L7.13914 6.11896L8.22066 7.80132ZM13.6105 3.25408L16.9705 7.57408L18.5493 6.3462L15.1893 2.0262L13.6105 3.25408ZM3.3599 7.96014H19.6799V5.96014H3.3599V7.96014ZM19.6799 20.3601H3.3599V22.3601H19.6799V20.3601ZM3.3999 20.4001V7.92014H1.3999V20.4001H3.3999ZM3.3599 20.3601C3.38199 20.3601 3.3999 20.378 3.3999 20.4001H1.3999C1.3999 21.4826 2.27742 22.3601 3.3599 22.3601V20.3601ZM19.6399 20.4001C19.6399 20.378 19.6578 20.3601 19.6799 20.3601V22.3601C20.7624 22.3601 21.6399 21.4826 21.6399 20.4001H19.6399ZM19.6799 7.96014C19.6578 7.96014 19.6399 7.94223 19.6399 7.92014H21.6399C21.6399 6.83766 20.7624 5.96014 19.6799 5.96014V7.96014ZM3.3599 5.96014C2.27742 5.96014 1.3999 6.83766 1.3999 7.92014H3.3999C3.3999 7.94223 3.38199 7.96014 3.3599 7.96014V5.96014ZM19.6399 17.2801V20.4001H21.6399V17.2801H19.6399ZM19.6399 7.92014V10.4401H21.6399V7.92014H19.6399Z"
+                    fill="black"
+                  />
+                </svg>
+              </button>
+            </a>
+            {% else %}
+            <div class="wallet-wrapper">
+              <button
+                class="btn wallet-btn"
+                id="wallet-dropdown-btn"
+                data-dropdown-btn
+              >
+                <svg class="btn__icon" width="25px" height="25px">
+                  <use
+                    href="{{ url_for('static', filename='images/icons.svg') }}#{{ current_user.wallet_name }}"
+                  ></use>
+                </svg>
+                <span class="btn__text balance-el"
+                  >{{ current_user.balance }} ETH</span
+                >
+              </button>
+              <div
+                class="wallet__dropdown-wrapper"
+                data-btn="wallet-dropdown-btn"
+                style="--dropdown-height: 410px"
+              >
+                <div class="wallet__dropdown">
+                  <div class="wallet__profile-info">
+                    <h3 class="wallet__profile-name">
+                      {{ current_user.username }}
+                    </h3>
+                    <div class="wallet__profile-id-wrapper">
+                      <p class="wallet__profile-id">
+                        ID: {{ current_user.id }}
+                      </p>
+                      <svg width="20px" height="20px" class="wallet__copy-icon">
+                        <use
+                          href="{{ url_for('static', filename='images/icons.svg') }}#copy"
+                        ></use>
+                      </svg>
+                    </div>
+                    <div class="wallet__balance-wrapper">
+                      <div class="crypto-icon-wrapper">
+                        <svg
+                          width="18px"
+                          height="30px"
+                          class="wallet__copy-icon"
+                        >
+                          <use
+                            href="{{ url_for('static', filename='images/icons.svg') }}#eth"
+                          ></use>
+                        </svg>
+                      </div>
+                      <div class="wallet__balance-info">
+                        <h5 class="wallet__balance-title">Balance</h5>
+                        <p class="wallet__balance-amount balance-el">
+                          {{ current_user.balance }} ETH
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <a
+                    href="{{ url_for('user.profile_page', user_id=current_user.id) }}"
+                    class="profile-btn"
+                  >
+                    <svg width="25px" height="25px" class="profile-btn__icon">
+                      <use
+                        href="{{ url_for('static', filename='images/icons.svg') }}#profile"
+                      ></use>
+                    </svg>
+                    <span class="profile-btn__text">View Profile</span>
+                  </a>
+                  <a href="#eth-modal" class="profile-btn">
+                    <svg width="25px" height="25px" class="profile-btn__icon">
+                      <use
+                        href="{{ url_for('static', filename='images/icons.svg') }}#addFunds"
+                      ></use>
+                    </svg>
+                    <span class="profile-btn__text">Add Funds</span>
+                  </a>
+                  <a
+                    href="{{ url_for('user.create_nft_page') }}"
+                    class="profile-btn hidden"
+                  >
+                    <svg width="25px" height="25px" class="profile-btn__icon">
+                      <use
+                        href="{{ url_for('static', filename='images/icons.svg') }}#stars"
+                      ></use>
+                    </svg>
+                    <span class="profile-btn__text">Create</span>
+                  </a>
+                  <a
+                    href="{{ url_for('main.drops_page') }}"
+                    class="profile-btn hidden"
+                  >
+                    <svg width="25px" height="25px" class="profile-btn__icon">
+                      <use
+                        href="{{ url_for('static', filename='images/icons.svg') }}#imageBlue"
+                      ></use>
+                    </svg>
+                    <span class="profile-btn__text">Drops</span>
+                  </a>
+                  <a
+                    href="{{ url_for('main.logout') }}"
+                    class="profile-btn"
+                    id="logoutBtn"
+                  >
+                    <svg width="25px" height="25px" class="profile-btn__icon">
+                      <use
+                        href="{{ url_for('static', filename='images/icons.svg') }}#exit"
+                      ></use>
+                    </svg>
+                    <span class="profile-btn__text">Disconnect</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            {% endif %} {% if current_user.is_authenticated and
+            current_user.role == 'admin' %}
+            <a href="{{ url_for('main.admin_page') }}">
+              <div class="profile-wrapper">
+                <div
+                  class="profile-pic"
+                  id="profile-dropdown-btn"
+                  data-dropdown-btn
+                >
+                  {% if current_user.profile_avatar == 'defaultBg.png' %}
+                  <img
+                    src="{{ url_for('static', filename='images/' + current_user.profile_avatar ) }}"
+                    alt="Profile Picture"
+                  />
+                  {% else %}
+                  <img
+                    src="{{ url_for('user.get_logo_image', user_id=current_user.id) }}"
+                    alt="User profile picture"
+                  />
+                  {% endif %}
+                </div>
+              </div>
+            </a>
+            {% endif %}
+          </div>
+          {% if not current_user.is_authenticated %}
+          <div class="burger-icon">
+            <span class="bar1"></span>
+            <span class="bar2"></span>
+            <span class="bar3"></span>
+          </div>
+          {% endif %}
+        </div>
+      </header>
+      <section class="page-content">
+        {% block content %}{% endblock content %}
+      </section>
+      <footer class="footer">
+        <div class="container">
+          <div class="footer__info-logo-wrapper">
+            <img
+              src="{{ url_for('static', filename='images/Logo.png') }}"
+              alt="Site Logo"
+            />
+            <span class="footer__info-logo-text">bytecraft</span>
+          </div>
+          <nav class="footer__info-nav">
+            <ul class="footer__info-nav-list">
+              <li class="footer__info-nav-item">
+                <a href="#" class="nav-btn">Blog</a>
+              </li>
+              <li class="footer__info-nav-item">
+                <a href="#" class="nav-btn">About</a>
+              </li>
+              <li class="footer__info-nav-item">
+                <a href="#" class="nav-btn">Cookie Policy</a>
+              </li>
+              <li class="footer__info-nav-item">
+                <a href="#" class="nav-btn">Help</a>
+              </li>
+              <li class="footer__info-nav-item">
+                <a href="#" class="nav-btn">Terms&Conditions</a>
+              </li>
+              <li class="footer__info-nav-item">
+                <a href="#" class="nav-btn">Privacy</a>
+              </li>
+            </ul>
+          </nav>
+          <div class="footer__socials">
+            <svg class="footer__social-icon" width="16px" height="16px">
+              <use
+                href="{{ url_for('static', filename='images/icons.svg') }}#instagram"
+              ></use>
+            </svg>
+            <svg class="footer__social-icon" width="16px" height="16px">
+              <use
+                href="{{ url_for('static', filename='images/icons.svg') }}#linkedIn"
+              ></use>
+            </svg>
+            <svg class="footer__social-icon" width="16px" height="16px">
+              <use
+                href="{{ url_for('static', filename='images/icons.svg') }}#facebook"
+              ></use>
+            </svg>
+            <svg class="footer__social-icon" width="16px" height="16px">
+              <use
+                href="{{ url_for('static', filename='images/icons.svg') }}#x"
+              ></use>
+            </svg>
+            <svg class="footer__social-icon" width="16px" height="16px">
+              <use
+                href="{{ url_for('static', filename='images/icons.svg') }}#telegram"
+              ></use>
+            </svg>
+          </div>
+        </div>
+      </footer>
+    </section>
+    {% if current_user.is_authenticated %}
+    <div class="icons-wrapper">
+      <svg id="circleOk">
+        <use
+          href="{{ url_for('static', filename='images/icons.svg') }}#circleOk"
+        ></use>
+      </svg>
+    </div>
+    <div id="eth-modal" class="modal" style="display: none">
+      <div class="modal-content">
+        <h2>Add ETH</h2>
+
+        <label for="eth-amount">Select amount:</label>
+        <select id="eth-amount">
+          <option value="0.1">0.1 ETH</option>
+          <option value="0.25">0.25 ETH</option>
+          <option value="0.5">0.5 ETH</option>
+          <option value="1">1 ETH</option>
+          <option value="5">5 ETH</option>
+        </select>
+
+        <div class="modal-actions">
+          <button id="confirm-eth" class="btn btn-primary">Confirm</button>
+          <button id="cancel-eth" class="btn">Cancel</button>
+        </div>
+      </div>
+    </div>
+    <div class="search-modal" id="searchModal">
+      <div class="search-modal__backdrop"></div>
+      <div class="search-modal__content">
+        <div class="search-modal__header">
+          <div class="search-input">
+            <svg
+              class="search-input__icon"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <circle cx="11" cy="11" r="8"></circle>
+              <polyline points="21 21 16.65 16.65"></polyline>
+            </svg>
+            <input
+              type="text"
+              class="search-input__field"
+              id="searchInput"
+              placeholder="Search NFTs, collections, users..."
+              autocomplete="off"
+            />
+            <button class="search-input__close" id="closeSearch">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="search-modal__body">
+          <div class="search-loading" id="searchLoading">
+            <div class="search-loading__spinner"></div>
+            <span>Searching...</span>
+          </div>
+
+          <div class="search-empty" id="searchEmpty">
+            <svg
+              width="48"
+              height="48"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+            >
+              <circle cx="11" cy="11" r="8"></circle>
+              <polyline points="21 21 16.65 16.65"></polyline>
+            </svg>
+            <h3>Start typing to search</h3>
+            <p>Search for NFTs, collections, or users</p>
+          </div>
+
+          <div class="search-results" id="searchResults">
+            <div class="search-section">
+              <h4 class="search-section__title">NFTs</h4>
+              <div class="search-section__items" id="nftResults"></div>
+            </div>
+
+            <div class="search-section">
+              <h4 class="search-section__title">Collections</h4>
+              <div class="search-section__items" id="collectionResults"></div>
+            </div>
+
+            <div class="search-section">
+              <h4 class="search-section__title">Users</h4>
+              <div class="search-section__items" id="userResults"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+  </body>
+</html>

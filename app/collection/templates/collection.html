@@ -1,0 +1,169 @@
+{% extends "base.html" %}{% block pageTitle %}{{ collection.name }}{% endblock
+pageTitle %} {% block head %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('collection.static', filename='collection/css/collection.min.css') }}"
+/>
+<script
+  src="{{ url_for('collection.static', filename='collection/js/collection.min.js') }}"
+  type="module"
+></script>
+{% endblock head %} {% block content %}
+<!-- Collection Banner -->
+<section class="collection">
+  <div class="collection-banner">
+    <img
+      src="{{ url_for('collection.get_baner_image', collection_id=collection.id) }}"
+      alt="Big Boys Collection Banner"
+      class="collection-banner__image"
+    />
+    <div class="collection-banner__overlay"></div>
+  </div>
+
+  <div class="container">
+    <!-- Collection Header -->
+    <div class="collection-header">
+      <div class="collection-header__featured">
+        <img
+          src="{{ url_for('collection.get_featured_image', collection_id=collection.id) }}"
+          alt="{{ collection.name }} Collection"
+          class="collection-header__featured-image"
+        />
+      </div>
+
+      <div class="collection-header__info">
+        <div class="collection-header__title-row">
+          <h1 class="collection-header__title">{{ collection.name }}</h1>
+          <div class="collection-header__category">
+            <span class="collection-category collection-category--art"
+              >{{ collection.category.name }}
+            </span>
+          </div>
+        </div>
+
+        {% if collection.user %}
+        <div class="collection-header__owner">
+          <a
+            href="{{ url_for('user.profile_page', user_id=collection.user.id) }}"
+          >
+            <div class="collection-header__owner-avatar">
+              <img
+                src="{{ url_for('user.get_logo_image', user_id=collection.user.id) }}"
+                alt="{{ collection.user.username }} profile Logo"
+              />
+            </div>
+          </a>
+
+          <div class="collection-header__owner-info">
+            <span class="collection-header__owner-label">Created by</span>
+            <a
+              href="{{ url_for('user.profile_page', user_id=collection.user.id) }}"
+            >
+              <span class="collection-header__owner-name"
+                >{{ collection.user.username }}</span
+              >
+            </a>
+          </div>
+          <span class="collection-header__verified">✓</span>
+        </div>
+        {% else %}
+        <p class="deleted-user">User Deleted his account</p>
+        {% endif %}
+
+        <p class="collection-header__description">
+          {{ collection.description }}
+        </p>
+
+        <div class="collection-header__dates">
+          <div class="collection-header__date">
+            <span class="collection-header__date-label">Created</span>
+            <span class="collection-header__date-value"
+              >{{ collection.created_at.strftime('%b %d, %Y') }}</span
+            >
+          </div>
+          <div class="collection-header__date">
+            <span class="collection-header__date-label">Updated</span>
+            <span class="collection-header__date-value"
+              >{{ collection.updated_at.strftime('%b %d, %Y') }}</span
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Collection Stats -->
+    <div class="collection-stats">
+      <div class="collection-stats__item">
+        <div class="collection-stats__value">
+          {{ collection.total_nfts|count }}
+        </div>
+        <div class="collection-stats__label">Total NFTs</div>
+      </div>
+      <div class="collection-stats__item">
+        <div class="collection-stats__value">{{ collection.floor }} ETH</div>
+        <div class="collection-stats__label">Floor Price</div>
+      </div>
+      <div class="collection-stats__item">
+        <div class="collection-stats__value">{{ collection.volume }} ETH</div>
+        <div class="collection-stats__label">Volume</div>
+      </div>
+      <div class="collection-stats__item">
+        <div class="collection-stats__value">{{ collection.royalty }}%</div>
+        <div class="collection-stats__label">Royalty</div>
+      </div>
+      <div class="collection-stats__item">
+        <div class="collection-stats__value">{{ collection.owners_count }}</div>
+        <div class="collection-stats__label">Owners</div>
+      </div>
+    </div>
+
+    <!-- Filters and Sort -->
+    <div class="collection-controls">
+      <div class="collection-controls__filters">
+        <button class="filter-btn" data-tabid="1">All</button>
+        <button class="filter-btn" data-tabid="2">Listed</button>
+        <button class="filter-btn" data-tabid="3">Not Listed</button>
+      </div>
+      <div class="sort-dropdown">
+        <button class="sort-dropdown__button">
+          <span class="sort-dropdown__text">Most popular</span>
+          <svg
+            class="sort-dropdown__icon"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </button>
+        <div class="sort-dropdown__content">
+          <a href="#" class="sort-dropdown__option" data-id="1">Most popular</a>
+          <a href="#" class="sort-dropdown__option" data-id="2"
+            >Price: Low to High</a
+          >
+          <a href="#" class="sort-dropdown__option" data-id="3"
+            >Price: High to Low</a
+          >
+          <a href="#" class="sort-dropdown__option" data-id="4">Oldest</a>
+          <a href="#" class="sort-dropdown__option" data-id="5">Newest</a>
+          <a href="#" class="sort-dropdown__option" data-id="6">Most Viewed</a>
+          <a href="#" class="sort-dropdown__option" data-id="7">Most Liked</a>
+        </div>
+      </div>
+    </div>
+    <div class="collection__items drops-grid"></div>
+    <div id="categoryLoader" class="loader-container" style="display: none">
+      <div class="loader">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <p class="loading-text">Loading NFTs...</p>
+    </div>
+  </div>
+</section>
+{% endblock content %}

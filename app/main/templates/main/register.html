@@ -1,0 +1,183 @@
+{% extends 'base.html' %} {% block pageTitle %}Register{% endblock pageTitle %}
+{% block head %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('main.static', filename='main/css/user-entry.min.css') }}"
+/>
+<script
+  src="{{ url_for('main.static', filename='main/js/user-entry.min.js') }}"
+  defer
+></script>
+<script
+  src="{{ url_for('main.static', filename='main/js/register.min.js') }}"
+  defer
+></script>
+{% endblock head %} {% block content %}
+<section class="user-entry">
+  <div class="user-entry__bg-wrapper">
+    <img
+      src="{{ url_for('main.static', filename='main/images/background.jpg') }}"
+      alt=""
+    />
+  </div>
+  <div class="container">
+    {% if not error %}
+    <h1 class="user-entry__title">Create New Account</h1>
+    <div class="user-entry__form-wrapper">
+      <div class="user-entry__form-box">
+        <div class="user-entry__form-box-info">
+          <h3 class="user-entry__form-box-title">Join Our Marketplace</h3>
+          <h4 class="user-entry__form-box-subtitle">
+            Ready to launch your next NFT collection? Create your account and
+            start minting, trading, and exploring with us.
+          </h4>
+          <div class="user-entry__form-box-highlights-wrapper">
+            <div class="user-entry__form-box-highlight-wrapper">
+              <svg class="user-entry__form-box-highlight-icon">
+                <use
+                  href="{{ url_for('static', filename='images/icons.svg') }}#image"
+                ></use>
+              </svg>
+              <p class="user-entry__form-box-highlight-text">
+                <span class="highlight-text__important">$300+</span> million in
+                NFT trading volume
+              </p>
+            </div>
+            <div class="user-entry__form-box-highlight-wrapper">
+              <svg class="user-entry__form-box-highlight-icon">
+                <use
+                  href="{{ url_for('static', filename='images/icons.svg') }}#exchange"
+                ></use>
+              </svg>
+              <p class="user-entry__form-box-highlight-text">
+                <span class="highlight-text__important">$50+</span> million in
+                creator earnings
+              </p>
+            </div>
+            <div class="user-entry__form-box-highlight-wrapper">
+              <svg class="user-entry__form-box-highlight-icon">
+                <use
+                  href="{{ url_for('static', filename='images/icons.svg') }}#people"
+                ></use>
+              </svg>
+              <p class="user-entry__form-box-highlight-text">
+                <span class="highlight-text__important">200K+</span> collectors
+                across the globe
+              </p>
+            </div>
+          </div>
+        </div>
+        <form class="user-entry__form" id="registerForm">
+          <div class="user-entry__form-field">
+            <label for="mail" class="form-label">Email</label>
+            <input
+              type="mail"
+              class="form-control"
+              id="mail"
+              name="mail"
+              placeholder="e.g:CryptoManiac@gmail.com"
+              data-category="register"
+              required
+            />
+          </div>
+          <div class="user-entry__form-field">
+            <label for="username" class="form-label">Username</label>
+            <input
+              type="text"
+              class="form-control"
+              id="username"
+              name="username"
+              placeholder="e.g:cryptomaniac474"
+              data-category="register"
+              required
+            />
+          </div>
+          <div class="user-entry__form-field">
+            <label for="displayName" class="form-label">Display Name</label>
+            <input
+              type="text"
+              class="form-control"
+              id="displayName"
+              name="displayName"
+              placeholder="e.g:NFTShark409"
+              data-category="register"
+              required
+            />
+          </div>
+          <div class="user-entry__form-field">
+            <label for="password" class="form-label">Password</label>
+            <input
+              type="password"
+              class="form-control"
+              id="password"
+              name="password"
+              placeholder="e.g:YourSuperSecretPassword123"
+              data-category="register"
+              required
+            />
+          </div>
+          <div class="user-entry__form-field">
+            <label for="repeatPassword" class="form-label"
+              >Repeat Password</label
+            >
+            <input
+              type="password"
+              class="form-control"
+              id="repeatPassword"
+              name="repeatPassword"
+              placeholder="e.g:YourSuperSecretPassword123"
+              data-category="register"
+              required
+            />
+          </div>
+
+          <p class="form-error hidden" id="registerError"></p>
+
+          <button type="submit" class="btn">
+            <div class="btn__text">Sign Up</div>
+          </button>
+        </form>
+      </div>
+    </div>
+    <h3 class="user-entry__subtitle">
+      Already have One?
+      <a href="{{ url_for('main.login') }}">
+        <span class="user-entry__highlight">SignIn</span>
+      </a>
+    </h3>
+    <div
+      class="scroll__wrapper"
+      style="--items: 8; --item-size: 480px"
+      id="scroll1"
+    >
+      <div class="scroll__item" style="--nomer: 1">
+        <span class="scroll__item-text">Become a Creator</span>
+      </div>
+      <div class="scroll__item" style="--nomer: 2">
+        <span class="scroll__item-text">Launch a Collection</span>
+      </div>
+      <div class="scroll__item" style="--nomer: 3">
+        <span class="scroll__item-text">Mint in Seconds</span>
+      </div>
+      <div class="scroll__item" style="--nomer: 4">
+        <span class="scroll__item-text">Become a Creator</span>
+      </div>
+      <div class="scroll__item" style="--nomer: 5">
+        <span class="scroll__item-text">Launch a Collection</span>
+      </div>
+      <div class="scroll__item" style="--nomer: 6">
+        <span class="scroll__item-text">Mint in Seconds</span>
+      </div>
+      <div class="scroll__item" style="--nomer: 7">
+        <span class="scroll__item-text">Become a Creator</span>
+      </div>
+      <div class="scroll__item" style="--nomer: 8">
+        <span class="scroll__item-text">Launch a Collection</span>
+      </div>
+    </div>
+    {% else %}
+    <h1 class="user-entry__title">{{ error }}</h1>
+    {% endif %}
+  </div>
+</section>
+{% endblock content %}

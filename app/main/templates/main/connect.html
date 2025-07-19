@@ -1,0 +1,76 @@
+{% extends 'base.html' %} {% block pageTitle %}Connect Wallet{% endblock
+pageTitle %} {% block head %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('main.static', filename='main/css/connect.min.css') }}"
+/>
+<script
+  src="{{ url_for('main.static', filename='main/js/connect.min.js') }}"
+  defer
+></script>
+{% endblock head %} {% block content %}
+<section class="connect">
+  <div class="connect__bg-wrapper">
+    <img
+      src="{{ url_for('main.static', filename='main/images/background2.jpg') }}"
+      alt=""
+    />
+  </div>
+  {% if not error %}
+  <div class="container">
+    <h1 class="connect__title">Connect Your Wallet</h1>
+    <div class="wallet__cards-wrapper">
+      {% if wallets %} {% for wallet in wallets %}
+      <div class="wallet__card" data-cardName="{{ wallet.id }}">
+        <div class="wallet__icon-wrapper">
+          <svg width="100px" height="100px">
+            <use href="static/{{ wallet.logo }}"></use>
+          </svg>
+        </div>
+        <h4 class="wallet__name">{{ wallet.name.capitalize() }}</h4>
+      </div>
+      {% endfor %} {% else %}
+      <div class="no-wallets__wrapper">
+        <h3 class="no-wallets__title">No Wallets At This Moment.</h3>
+        <span class="no-wallets__icon">💳</span>
+      </div>
+      {% endif %}
+    </div>
+    {% if wallets %}
+    <div class="light-blob" id="blob-1"></div>
+    <div class="light-blob" id="blob-2"></div>
+    {% endif %}
+    <div class="scroll__wrapper" style="--items: 8; --item-size: 220px">
+      <div class="scroll__item" style="--nomer: 1">
+        <span class="scroll__item-text">MAKE</span>
+      </div>
+      <div class="scroll__item" style="--nomer: 2">
+        <span class="scroll__item-text">SELL</span>
+      </div>
+      <div class="scroll__item" style="--nomer: 3">
+        <span class="scroll__item-text">BUY</span>
+      </div>
+      <div class="scroll__item" style="--nomer: 4">
+        <span class="scroll__item-text">MAKE</span>
+      </div>
+      <div class="scroll__item" style="--nomer: 5">
+        <span class="scroll__item-text">SELL</span>
+      </div>
+      <div class="scroll__item" style="--nomer: 6">
+        <span class="scroll__item-text">BUY</span>
+      </div>
+      <div class="scroll__item" style="--nomer: 7">
+        <span class="scroll__item-text">MAKE</span>
+      </div>
+      <div class="scroll__item" style="--nomer: 8">
+        <span class="scroll__item-text">SELL</span>
+      </div>
+    </div>
+  </div>
+  {% else %}
+  <div class="container">
+    <div class="connect__title">{{ error }}</div>
+  </div>
+  {% endif %}
+</section>
+{% endblock content %}

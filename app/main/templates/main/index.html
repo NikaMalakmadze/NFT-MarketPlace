@@ -1,0 +1,224 @@
+{% extends 'base.html' %} {% block pageTitle %}Home{% endblock pageTitle %} {%
+block head %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('main.static', filename='main/css/index.min.css') }}"
+/>
+<script
+  src="{{ url_for('main.static', filename='main/js/index.min.js') }}"
+  type="module"
+></script>
+<link
+  href="https://unpkg.com/gridjs/dist/theme/mermaid.min.css"
+  rel="stylesheet"
+/>
+<script src="https://unpkg.com/gridjs/dist/gridjs.umd.js"></script>
+{% endblock head %} {% block content %}
+<section class="hero">
+  <div class="container">
+    <div class="hero__info-wrapper">
+      <h1 class="hero__title">Discover Limitless Creations.</h1>
+      <h2 class="hero__subtitle">
+        Discover, collect, and trade unique digital assets with ease — where
+        innovative design meets a seamless NFT experience.
+      </h2>
+    </div>
+    <img
+      src="{{ url_for('main.static', filename='main/images/cubes.png') }}"
+      alt=""
+      class="hero__image"
+    />
+  </div>
+</section>
+<section class="trusted-by">
+  <div class="container">
+    <h4 class="trusted-by__title">
+      Trusted by the world’s most innovative teams
+    </h4>
+    <div class="scroll__wrapper" id="trustedBy">
+      <div class="scroll__items">
+        {% for trusted in trusted_by %}
+        <div class="scroll__item">
+          <img
+            src="{{ url_for('static', filename=trusted.logo) }}"
+            alt="{{ trusted.name }} Logo"
+            class="scroll__item-logo"
+          />
+          <span class="scroll__item-text">{{ trusted.name.capitalize() }}</span>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+<section class="collections">
+  <div class="container">
+    <h3 class="drops__title">Top Collections</h3>
+    <div id="nft-table"></div>
+  </div>
+</section>
+<section class="drops">
+  <div class="container">
+    <h3 class="drops__title">Latest Drops</h3>
+    <div class="drops__wrapper">
+      {% if nfts %} {% for nft in nfts %}
+      <div class="drop__item">
+        <div class="drop__item-img-wrapper">
+          <img
+            src="{{ url_for('nft.get_nft_image', token_id=nft.token_id) }}"
+            alt="{{ nft.name }} Image"
+            class="drop__item-img"
+            loading="lazy"
+          />
+        </div>
+        <div class="drop__item-info">
+          <div class="drop__item-author-wrapper">
+            <a href="{{ url_for('user.profile_page', user_id=nft.owner.id) }}"
+              ><h6 class="drop__item-author">
+                {{ nft.owner_name.capitalize() }}
+              </h6></a
+            >
+            <svg class="drop__item-author--verified"></svg>
+          </div>
+          <h5 class="drop__item-title">
+            <a href="{{ url_for('nft.nft_item_info', token_id=nft.token_id) }}"
+              >{{ nft.name.title() }}</a
+            >
+          </h5>
+        </div>
+        <div class="drop__item-price-wrapper">
+          <div class="drop__item-mint-wrapper">
+            <p class="drop__item-mint-desc">Minting</p>
+            <div class="drop__item-mint-status">
+              {% if nft.is_listed %}
+              <div class="status-dot"></div>
+              <p>Now</p>
+              {% endif %}
+            </div>
+          </div>
+          <div class="drop__item-price-info">
+            <p class="drop__item-price-desc">Price</p>
+            <p class="drop__item-price-status">{{ nft.price }} ETH</p>
+          </div>
+        </div>
+      </div>
+      {% endfor %} {% else %}
+      <div class="no-drops-card">
+        <div class="no-drops-icon">🚫</div>
+        <h2>No Latest Drops</h2>
+        <p>Come back soon — new NFTs are dropping regularly!</p>
+      </div>
+      {% endif %}
+    </div>
+    <a href="/drops">
+      <btn class="btn drops-btn">
+        <span class="btn__text">View All Drops</span>
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          class="btn__icon"
+        >
+          <path
+            d="M13.8333 5L20.5 12M20.5 12L13.8333 19M20.5 12L4.5 12"
+            stroke="#24222A"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </btn>
+    </a>
+  </div>
+</section>
+<section class="categories">
+  <div class="container">
+    <h3 class="categories__title">Trending in Categories</h3>
+    <div class="categories__container">
+      <div class="categories__btns-wrapper">
+        {% if categories %} {% for category in categories %}
+        <div class="categories__btn" data-categoryId="{{ loop.index }}">
+          <svg class="categories__btn-icon">
+            <use
+              href="{{ url_for('nft.get_category_image', category_id=category.id) }}"
+            ></use>
+          </svg>
+          <h6 class="categories__btn-text">{{ category.name }}</h6>
+        </div>
+        {% endfor %} {% endif %}
+      </div>
+      <div id="categoryLoader" class="loader-container" style="display: none">
+        <div class="loader">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <p class="loading-text">Loading NFTs...</p>
+      </div>
+      <div class="categories__drops-wrapper"></div>
+    </div>
+    <btn class="btn" id="categoriesMoreBtn">
+      <span class="btn__text"></span>
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        class="btn__icon"
+      >
+        <path
+          d="M13.8333 5L20.5 12M20.5 12L13.8333 19M20.5 12L4.5 12"
+          stroke="#24222A"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </btn>
+  </div>
+</section>
+<section class="newsletter">
+  <div class="newsletter__container">
+    <div class="newsletter__content">
+      <div class="newsletter__text">
+        <h2 class="newsletter__title">Stay in the Loop</h2>
+        <p class="newsletter__description">
+          Get the latest updates on new collections, trending artists, and
+          exclusive drops delivered to your inbox.
+        </p>
+      </div>
+      <div class="newsletter__form">
+        <div class="newsletter__input-group">
+          <input
+            type="email"
+            placeholder="Enter your email address"
+            class="newsletter__input"
+            id="newsletter-email"
+          />
+          <button class="newsletter__btn">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <line x1="22" y1="2" x2="11" y2="13"></line>
+              <polygon points="22,2 15,22 11,13 2,9"></polygon>
+            </svg>
+            Subscribe
+          </button>
+        </div>
+        <p class="newsletter__privacy">
+          We respect your privacy. Unsubscribe at any time.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock content %}

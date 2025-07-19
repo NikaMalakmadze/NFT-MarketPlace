@@ -1,0 +1,571 @@
+{% extends "base.html" %} {% block pageTitle %}Create{% endblock pageTitle %} {%
+block head %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('user.static', filename='user/css/createNft.min.css') }}"
+/>
+<script
+  src="{{ url_for('user.static', filename='user/js/createNft.min.js') }}"
+  type="module"
+></script>
+<script
+  src="{{ url_for('main.static', filename='main/js/useAuth.min.js') }}"
+  type="module"
+></script>
+{% endblock head %} {% block content %}
+<section class="create">
+  <div class="container">
+    <div class="tabs-btn__container">
+      <div class="tabs-btn__wrapper">
+        <a id="tab-1" class="btn tab-btn" href="#createCollection">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            class="btn__icon"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M19.8213 7.19999L11.5074 2.39999L3.1936 7.19999V16.8L11.5074 21.6M19.8213 7.19999L11.5074 12.6M19.8213 7.19999V12M11.5074 21.6V12.6M11.5074 21.6L13.3069 20.5611M11.5074 12.6L3.70745 7.79999M15.1074 9.59999L7.30745 4.79999M15.4064 17.7H18.1068M18.1068 17.7H20.8064M18.1068 17.7L18.1068 15M18.1068 17.7V20.4"
+              stroke="black"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+          <span class="btn__text">Create Collection</span>
+        </a>
+        <a id="tab-2" class="btn tab-btn" href="#createNFT">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            class="btn__icon"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M6.19739 20.9343L15.256 12.4086L19.5188 16.6714M6.19739 20.9343H16.8545C18.6203 20.9343 20.0517 19.5029 20.0517 17.7371V12.4086M6.19739 20.9343C4.43165 20.9343 3.00024 19.5029 3.00024 17.7371V7.08001C3.00024 5.31427 4.43165 3.88287 6.19739 3.88287H13.1245M18.986 9.02859L18.986 6.01429M18.986 6.01429L18.986 3M18.986 6.01429L15.9717 6.01429M18.986 6.01429L22.0002 6.01429M9.39453 8.67858C9.39453 9.56144 8.67882 10.2771 7.79596 10.2771C6.91309 10.2771 6.19739 9.56144 6.19739 8.67858C6.19739 7.79571 6.91309 7.08001 7.79596 7.08001C8.67882 7.08001 9.39453 7.79571 9.39453 8.67858Z"
+              stroke="black"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+          <span class="btn__text">Create NFT</span>
+        </a>
+        <a id="tab-3" class="btn tab-btn" href="#help">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            class="btn__icon"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 16.4999V16.5395M9.75098 9.22996C9.75098 7.96386 10.7583 6.93748 12.001 6.93748C13.2436 6.93748 14.251 7.96386 14.251 9.22996C14.251 10.4961 13.2436 11.5224 12.001 11.5224C12.001 11.5224 12 12.2067 12 13.0508M21 6.37498L21 17.625C21 19.489 19.489 21 17.625 21H6.375C4.51104 21 3 19.489 3 17.625V6.37498C3 4.51103 4.51104 3 6.375 3H17.625C19.489 3 21 4.51103 21 6.37498Z"
+              stroke="black"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+          <span class="btn__text">Help</span>
+        </a>
+      </div>
+    </div>
+    <div class="tabs-content__container">
+      <div class="tab-content" id="createCollection">
+        <h1 class="create__title">Create New Collection</h1>
+        <p class="create__desc">
+          Group your NFTs under a unique, branded collection. Upload your
+          collection's logo, banner, and description to showcase your project,
+          set royalties, and link your socials. This collection will appear
+          publicly on your profile and can help build your identity on the
+          marketplace.
+        </p>
+        <div class="create__desc-wrapper">
+          <div class="required">
+            <svg>
+              <use
+                href="{{ url_for('user.static', filename='user/images/required-1.svg') }}"
+              ></use>
+            </svg>
+          </div>
+          <p class="create__desc">Required Field</p>
+        </div>
+
+        <form class="form" id="collectionForm">
+          <p class="file-input__desc">
+            File Types supported: {% for supported in supporteds
+            %}{{supported.upper()}}, {% endfor %} Max Size: 5MB
+          </p>
+
+          <div class="file-input__container" id="collectionBanerContainer">
+            <label for="CollectionBaner" class="file-input__label">
+              <div class="file-input__title-wrapper">
+                <h4 class="file-input__title">Baner Image</h4>
+                <div class="required">
+                  <svg>
+                    <use
+                      href="{{ url_for('user.static', filename='user/images/required-1.svg') }}"
+                    ></use>
+                  </svg>
+                </div>
+              </div>
+              <p class="file-input__desc">
+                Shown on the marketplace, profile, etc.
+              </p>
+            </label>
+
+            <div class="form__input-file">
+              <div class="form_input-file-wrapper">
+                <input
+                  type="file"
+                  id="CollectionBaner"
+                  name="collection_logo"
+                  class="input-hidden image-input"
+                />
+                <img src="" alt="" class="preview hidden" />
+                <div class="form_input-file-info">
+                  <div class="form_input-file-icon">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="200"
+                      height="200"
+                      viewBox="0 0 384 384"
+                    >
+                      <path
+                        fill="#adadad"
+                        d="M384 341q0 18-12.5 30.5T341 384H43q-18 0-30.5-12.5T0 341V43q0-18 12.5-30.5T43 0h298q18 0 30.5 12.5T384 43v298zM117 224l-74 96h298l-96-128l-74 96z"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="file-input__container" id="collectionLogoContainer">
+            <label for="CollectionLogo" class="file-input__label">
+              <div class="file-input__title-wrapper">
+                <h4 class="file-input__title">Logo Image</h4>
+                <div class="required">
+                  <svg>
+                    <use
+                      href="{{ url_for('user.static', filename='user/images/required-1.svg') }}"
+                    ></use>
+                  </svg>
+                </div>
+              </div>
+              <p class="file-input__desc">
+                Shown on the marketplace, profile, etc.
+              </p>
+            </label>
+
+            <div class="form__input-file">
+              <div class="form_input-file-wrapper">
+                <input
+                  type="file"
+                  id="CollectionLogo"
+                  name="collection_logo"
+                  class="input-hidden image-input"
+                />
+                <img src="" alt="" class="preview hidden" />
+                <div class="form_input-file-info">
+                  <div class="form_input-file-icon">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="200"
+                      height="200"
+                      viewBox="0 0 384 384"
+                    >
+                      <path
+                        fill="#adadad"
+                        d="M384 341q0 18-12.5 30.5T341 384H43q-18 0-30.5-12.5T0 341V43q0-18 12.5-30.5T43 0h298q18 0 30.5 12.5T384 43v298zM117 224l-74 96h298l-96-128l-74 96z"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="file-input__container" id="collectionFeaturedContainer">
+            <label for="CollectionFeatured" class="file-input__label">
+              <div class="file-input__title-wrapper">
+                <h4 class="file-input__title">Featured Image</h4>
+                <div class="required">
+                  <svg>
+                    <use
+                      href="{{ url_for('user.static', filename='user/images/required-1.svg') }}"
+                    ></use>
+                  </svg>
+                </div>
+              </div>
+              <p class="file-input__desc">Displayed on homepage/promotions.</p>
+            </label>
+
+            <div class="form__input-file">
+              <div class="form_input-file-wrapper">
+                <input
+                  type="file"
+                  id="CollectionFeatured"
+                  name="collection_Featured"
+                  class="input-hidden image-input"
+                />
+                <img src="" alt="" class="preview hidden" />
+                <div class="form_input-file-info">
+                  <div class="form_input-file-icon">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="200"
+                      height="200"
+                      viewBox="0 0 384 384"
+                    >
+                      <path
+                        fill="#adadad"
+                        d="M384 341q0 18-12.5 30.5T341 384H43q-18 0-30.5-12.5T0 341V43q0-18 12.5-30.5T43 0h298q18 0 30.5 12.5T384 43v298zM117 224l-74 96h298l-96-128l-74 96z"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="text-input__container">
+            <label for="CollectionName" class="text-input">
+              <div class="text-input__title-wrapper">
+                <h4 class="text-input__title">Name</h4>
+                <div class="required">
+                  <svg>
+                    <use
+                      href="{{ url_for('user.static', filename='user/images/required-1.svg') }}"
+                    ></use>
+                  </svg>
+                </div>
+              </div>
+            </label>
+            <input
+              type="text"
+              id="CollectionName"
+              class="form-control"
+              placeholder="collection name"
+              name="collectionName"
+              minlength="5"
+              maxlength="100"
+              required
+            />
+          </div>
+
+          <div class="text-input__container">
+            <label for="CollectionDescription" class="text-input">
+              <div class="desc-wrapper">
+                <h4 class="text-input__title">Description</h4>
+                <div class="text-input__desc">
+                  Write your Collection's description. it will appear on your
+                  item's page
+                </div>
+              </div>
+            </label>
+            <textarea
+              id="CollectionDescription"
+              class="form-control desc-input"
+              name="description"
+              placeholder="my Collection has..."
+              rows="4"
+              maxlength="1000"
+              required
+            ></textarea>
+          </div>
+
+          <div class="text-input__container">
+            <label
+              for="CollectionCategory"
+              class="text-input"
+              id="collectionCategoryLabel"
+            >
+              <div class="text-input__title-wrapper">
+                <h4 class="text-input__title">Choose Category</h4>
+                <div class="required">
+                  <svg>
+                    <use
+                      href="{{ url_for('user.static', filename='user/images/required-1.svg') }}"
+                    ></use>
+                  </svg>
+                </div>
+              </div>
+              <p class="text-input__desc">
+                Adding Category will make your collection more discoverable on
+                our marketplace
+              </p>
+            </label>
+            <div class="custom-select-wrapper">
+              <div class="custom-select">
+                <span class="selected-option">Choose category</span>
+                <ul class="select-options hidden">
+                  {% for collection_category in collection_categories %}
+                  <li data-value="{{ collection_category.id }}">
+                    {{ collection_category.name.capitalize() }}
+                  </li>
+                  {% endfor %}
+                </ul>
+              </div>
+              <input
+                type="hidden"
+                id="CollectionCategory"
+                name="collection_category_id"
+                class="selected-input"
+              />
+            </div>
+          </div>
+
+          <div class="text-input__container">
+            <label for="royalty" class="text-input" id="categoryRoyaltyLabel">
+              <div class="text-input__title-wrapper">
+                <h4 class="text-input__title">Royalties</h4>
+                <div class="required">
+                  <svg>
+                    <use
+                      href="{{ url_for('user.static', filename='user/images/required-1.svg') }}"
+                    ></use>
+                  </svg>
+                </div>
+              </div>
+              <p class="text-input__desc">
+                Earn passive income when your NFTs are resold! Enter the royalty
+                percentage you'd like to receive from secondary sales. This
+                helps support your ongoing creative work.
+              </p>
+            </label>
+            <input
+              type="number"
+              id="royalty"
+              placeholder="0.00"
+              class="form-control"
+              name="price"
+              step="0.01"
+              min="0"
+              max="10"
+              required
+            />
+          </div>
+
+          <button type="submit" class="btn">
+            <span class="btn__text">Create Collection</span>
+          </button>
+        </form>
+      </div>
+      <div class="tab-content" id="createNFT">
+        <h1 class="create__title">Create New NFT</h1>
+        <div class="create__desc-wrapper">
+          <div class="required">
+            <svg>
+              <use
+                href="{{ url_for('user.static', filename='user/images/required-1.svg') }}"
+              ></use>
+            </svg>
+          </div>
+          <p class="create__desc">Required Field</p>
+        </div>
+        <form
+          action="{{ url_for('api.nft-api.create_nft') }}"
+          class="form"
+          id="createNftForm"
+          enctype="multipart/form-data"
+          method="POST"
+        >
+          <div class="file-input__container">
+            <label for="inputFile" class="file-input__label">
+              <div class="file-input__title-wrapper">
+                <h4 class="file-input__title">Upload Your NFT's Image</h4>
+                <div class="required">
+                  <svg>
+                    <use
+                      href="{{ url_for('user.static', filename='user/images/required-1.svg') }}"
+                    ></use>
+                  </svg>
+                </div>
+              </div>
+              <p class="file-input__desc">
+                File Types supported: {% for supported in supporteds
+                %}{{supported.upper()}}, {% endfor %} Max Size: 5MB
+              </p>
+            </label>
+
+            <div class="form__input-file">
+              <div class="form_input-file-wrapper">
+                <input
+                  type="file"
+                  id="inputFile"
+                  name="image_url"
+                  class="input-hidden image-input"
+                />
+                <img src="" alt="" class="preview hidden" />
+                <div class="form_input-file-info">
+                  <div class="form_input-file-icon">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="200"
+                      height="200"
+                      viewBox="0 0 384 384"
+                    >
+                      <path
+                        fill="#adadad"
+                        d="M384 341q0 18-12.5 30.5T341 384H43q-18 0-30.5-12.5T0 341V43q0-18 12.5-30.5T43 0h298q18 0 30.5 12.5T384 43v298zM117 224l-74 96h298l-96-128l-74 96z"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="text-input__container">
+            <label for="name" class="text-input">
+              <div class="text-input__title-wrapper">
+                <h4 class="text-input__title">Name</h4>
+                <div class="required">
+                  <svg>
+                    <use
+                      href="{{ url_for('user.static', filename='user/images/required-1.svg') }}"
+                    ></use>
+                  </svg>
+                </div>
+              </div>
+            </label>
+            <input
+              type="text"
+              id="name"
+              class="form-control"
+              placeholder="item name"
+              name="name"
+              minlength="5"
+              maxlength="100"
+              required
+            />
+          </div>
+
+          <div class="text-input__container">
+            <label for="description" class="text-input">
+              <div class="desc-wrapper">
+                <h4 class="text-input__title">Description</h4>
+                <div class="text-input__desc">
+                  Write your NFT item's description. it will appear on your
+                  item's page
+                </div>
+              </div>
+            </label>
+            <textarea
+              id="description"
+              class="form-control desc-input"
+              name="description"
+              placeholder="my NFT is..."
+              rows="4"
+              maxlength="1000"
+              required
+            ></textarea>
+          </div>
+
+          <div class="text-input__container">
+            <label for="price" class="text-input">
+              <div class="text-input__title-wrapper">
+                <h4 class="text-input__title">Price</h4>
+                <div class="required">
+                  <svg>
+                    <use
+                      href="{{ url_for('user.static', filename='user/images/required-1.svg') }}"
+                    ></use>
+                  </svg>
+                </div>
+              </div>
+            </label>
+            <input
+              type="number"
+              id="price"
+              placeholder="item price"
+              class="form-control"
+              name="price"
+              step="0.01"
+              min="0"
+              required
+            />
+          </div>
+
+          <div class="text-input__container">
+            <label for="SelectedNFTCategory" class="text-input">
+              <div class="text-input__title-wrapper">
+                <h4 class="text-input__title">Choose Category</h4>
+                <div class="required">
+                  <svg>
+                    <use
+                      href="{{ url_for('user.static', filename='user/images/required-1.svg') }}"
+                    ></use>
+                  </svg>
+                </div>
+              </div>
+            </label>
+            <div class="custom-select-wrapper">
+              <div class="custom-select">
+                <span class="selected-option">Choose category</span>
+                <ul class="select-options hidden">
+                  {% for category in categories %}
+                  <li data-value="{{ category.id }}">{{ category.name }}</li>
+                  {% endfor %}
+                </ul>
+              </div>
+              <input
+                type="hidden"
+                id="SelectedNFTCategory"
+                name="category_id"
+                class="selected-input"
+              />
+            </div>
+          </div>
+
+          <div class="text-input__container">
+            <label for="SelectedNFTCollection" class="text-input">
+              <div class="text-input__title-wrapper">
+                <h4 class="text-input__title">Choose Collection</h4>
+              </div>
+            </label>
+            <div class="custom-select-wrapper">
+              <div class="custom-select">
+                <span class="selected-option">Choose Collection</span>
+                <ul class="select-options hidden">
+                  <li data-value="-1">None</li>
+                  {% for collection in collections %}
+                  <li data-value="{{ collection.id }}">
+                    {{ collection.name }}
+                  </li>
+                  {% endfor %}
+                </ul>
+              </div>
+              <input
+                type="hidden"
+                id="SelectedNFTCollection"
+                name="collection_id"
+                class="selected-input"
+                value="-1"
+              />
+            </div>
+          </div>
+
+          <button type="submit" class="btn">
+            <span class="btn__text">Create NFT</span>
+          </button>
+        </form>
+        {% if message %}
+        <p>{{ message }}</p>
+        {% endif %}
+      </div>
+      <div class="tab-content" id="help">
+        <h1>tab3</h1>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock content %}

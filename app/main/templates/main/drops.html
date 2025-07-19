@@ -1,0 +1,247 @@
+{% extends 'base.html' %} {% block pageTitle %}Drops{% endblock pageTitle %} {%
+block head %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('main.static', filename='main/css/drops.min.css') }}"
+/>
+<script
+  src="{{ url_for('main.static', filename='main/js/drops.min.js') }}"
+  type="module"
+></script>
+{% endblock head %} {% block content %}
+<div class="marketplace">
+  <div class="marketplace__container">
+    <!-- Sidebar Filters -->
+    <div class="filters">
+      <div class="filters__header">
+        <div class="filters__header-left">
+          <svg
+            class="filters__icon"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <polygon
+              points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"
+            ></polygon>
+          </svg>
+          <span class="filters__title">Filters</span>
+        </div>
+        <button class="filters__close" aria-label="Close filters">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <div class="filters__section">
+        <h3 class="filters__section-title">PRICE</h3>
+        <div class="filters__price-inputs">
+          <div class="filters__price-input">
+            <label class="filters__label">MIN PRICE</label>
+            <input
+              type="text"
+              class="filters__input"
+              placeholder="0 ETH"
+              id="minInput"
+            />
+          </div>
+          <div class="filters__price-input">
+            <label class="filters__label">MAX PRICE</label>
+            <input
+              type="text"
+              class="filters__input"
+              placeholder="0 ETH"
+              id="maxInput"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="filters__section">
+        <div class="filters__dropdown">
+          <button class="filters__dropdown-button">
+            <span>Category</span>
+            <svg
+              class="filters__dropdown-icon"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+          <div class="filters__dropdown-content">
+            {% for category in categories %}
+            <label class="filters__checkbox">
+              <input
+                type="checkbox"
+                data-categoryid="{{ category.id }}"
+                class="category-input"
+              />
+              <span>{{ category.name.capitalize() }}</span>
+            </label>
+            {% endfor %}
+          </div>
+        </div>
+        <div class="filters__dropdown">
+          <button class="filters__dropdown-button">
+            <span>Type of file</span>
+            <svg
+              class="filters__dropdown-icon"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+          <div class="filters__dropdown-content">
+            {% for file_type in file_types %}
+            <label class="filters__checkbox">
+              <input
+                type="checkbox"
+                data-filetype="{{ loop.index }}"
+                class="file-types-input"
+              />
+              <span>{{ file_type.upper() }}</span>
+            </label>
+            {% endfor %}
+          </div>
+        </div>
+        <div class="filters__dropdown">
+          <button class="filters__dropdown-button">
+            <span>Is Listed</span>
+            <svg
+              class="filters__dropdown-icon"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+          <div class="filters__dropdown-content">
+            <label class="filters__checkbox">
+              <input type="checkbox" data-listed="1" class="is-listed-input" />
+              <span>Listed</span>
+            </label>
+            <label class="filters__checkbox">
+              <input type="checkbox" data-listed="2" class="is-listed-input" />
+              <span>Not Listed</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="filters__actions">
+        <button class="filters__apply-button">Apply</button>
+        <button class="filters__clear-button">Clear all</button>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content">
+      <!-- Search and Controls -->
+      <div class="content__header">
+        <div class="content__controls">
+          <button class="filter-toggle" aria-label="Toggle filters">
+            <svg
+              class="filter-toggle__icon"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <polygon
+                points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"
+              ></polygon>
+            </svg>
+            <span class="filter-toggle__text">Filters</span>
+          </button>
+
+          <div class="search-box">
+            <svg
+              class="search-box__icon"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <circle cx="11" cy="11" r="8"></circle>
+              <polyline points="21 21 16.65 16.65"></polyline>
+            </svg>
+            <input
+              type="text"
+              class="search-box__input"
+              placeholder="Search by NFTs"
+            />
+          </div>
+          <div class="sort-dropdown">
+            <button class="sort-dropdown__button">
+              <span class="sort-dropdown__text">Most popular</span>
+              <svg
+                class="sort-dropdown__icon"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+            <div class="sort-dropdown__content">
+              <a href="#" class="sort-dropdown__option" data-id="1"
+                >Most popular</a
+              >
+              <a href="#" class="sort-dropdown__option" data-id="2"
+                >Price: Low to High</a
+              >
+              <a href="#" class="sort-dropdown__option" data-id="3"
+                >Price: High to Low</a
+              >
+              <a href="#" class="sort-dropdown__option" data-id="4">Oldest</a>
+              <a href="#" class="sort-dropdown__option" data-id="5">Newest</a>
+              <a href="#" class="sort-dropdown__option" data-id="6"
+                >Most Viewed</a
+              >
+              <a href="#" class="sort-dropdown__option" data-id="7"
+                >Most Liked</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NFT Grid -->
+      <div class="drops-grid"></div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,134 @@
+{% extends "base.html" %} {% block pageTitle %}{{ user.username }}{% endblock
+pageTitle %} {% block head %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('user.static', filename='user/css/update.min.css') }}"
+/>
+<script
+  src="{{ url_for('user.static', filename='user/js/update.min.js') }}"
+  type="module"
+></script>
+<script
+  src="{{ url_for('main.static', filename='main/js/useAuth.min.js') }}"
+  type="module"
+></script>
+{% endblock head %} {% block content %}
+<main class="profile edit-profile">
+  <!-- Banner and Profile Picture Section -->
+  <section class="edit-profile__banner-section">
+    <div class="edit-profile__banner-container">
+      <div class="edit-profile__banner" aria-label="Profile banner">
+        <img src="{{ url_for('user.get_bg_image', user_id=user.id) }}" alt="" />
+        <label for="banner-upload" class="edit-profile__banner-upload">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 16L12 8M12 8L15 11M12 8L9 11M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"
+              stroke="white"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+          <span>Upload Cover</span>
+        </label>
+      </div>
+
+      <input
+        type="file"
+        id="banner-upload"
+        accept="image/*"
+        class="edit-profile__file-input"
+      />
+
+      <div class="edit-profile__avatar">
+        <img
+          src="{{ url_for('user.get_logo_image', user_id=user.id) }}"
+          alt="User profile picture"
+        />
+        <label for="avatar-upload" class="edit-profile__avatar-upload">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 16L12 8M12 8L15 11M12 8L9 11M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"
+              stroke="white"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </label>
+      </div>
+      <input
+        type="file"
+        id="avatar-upload"
+        accept="image/*"
+        class="edit-profile__file-input"
+      />
+    </div>
+  </section>
+
+  <!-- Edit Profile Form -->
+  <section class="edit-profile__form-section">
+    <div class="edit-profile__form-container">
+      <h1 class="edit-profile__title">Edit Profile</h1>
+
+      <form class="edit-profile__form">
+        <div class="edit-profile__form-group">
+          <label for="display-name" class="edit-profile__label"
+            >Display Name</label
+          >
+          <input
+            type="text"
+            id="display-name"
+            class="form-control"
+            value="{{ user.display_name }}"
+          />
+        </div>
+
+        <div class="edit-profile__form-group">
+          <label for="email" class="edit-profile__label">Email Address</label>
+          <input
+            type="email"
+            id="email"
+            class="form-control"
+            value="{{ user.email }}"
+          />
+        </div>
+
+        <div class="edit-profile__form-group">
+          <label for="bio" class="edit-profile__label">Bio</label>
+          <textarea id="bio" class="form-control desc-input" rows="5">
+{% if user.bio %}{{ user.bio }}{% else %}write something about yourself...{% endif %}</textarea
+          >
+          <div class="edit-profile__textarea-counter">
+            <span id="bio-count">300</span> characters left
+          </div>
+        </div>
+
+        <div class="edit-profile__actions">
+          <a href="{{ url_for('user.profile_page', user_id=user.id) }}">
+            <button type="button" class="edit-profile__cancel-button">
+              Cancel
+            </button>
+          </a>
+
+          <button type="submit" class="edit-profile__save-button">
+            Save Changes
+          </button>
+        </div>
+      </form>
+    </div>
+  </section>
+</main>
+{% endblock content %}

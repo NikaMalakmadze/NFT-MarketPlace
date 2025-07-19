@@ -1,0 +1,237 @@
+{% extends "base.html" %}{% block pageTitle %}{{ nft.name }}{% endblock
+pageTitle %} {% block head %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('nft.static', filename='nft/css/nft-item.min.css') }}"
+/>
+{% if not current_user.is_anonymous %}
+<script
+  src="{{ url_for('main.static', filename='main/js/useAuth.min.js') }}"
+  type="module"
+></script>
+<script
+  src="{{ url_for('nft.static', filename='nft/js/nft-item.min.js') }}"
+  type="module"
+></script>
+
+{% else %}
+<script
+  src="{{ url_for('nft.static', filename='nft/js/price.min.js') }}"
+  type="module"
+></script>
+{% endif %} {% endblock head %} {% block content %}
+<section class="nft-item__section">
+  <div class="container">
+    <!-- NFT Item -->
+    <main class="nft-item">
+      <!-- NFT Image -->
+      <div class="nft-item__image-container">
+        <img
+          src="{{ url_for('nft.get_nft_image', token_id=nft.token_id) }}"
+          alt="{{ nft.name }} NFT"
+          class="nft-item__image"
+        />
+      </div>
+
+      <!-- NFT Details -->
+      <div class="nft-item__details">
+        {% if nft.collection_id %}
+        <a
+          href="{{ url_for('collection.collection_page', collection_id=nft.collection.id) }}"
+          class="nft-item__collection"
+        >
+          <img
+            src="{{ url_for('collection.get_featured_image', collection_id=nft.collection.id) }}"
+            alt="{{ nft.collection.name }} featured image"
+            class="nft-item__collection-logo"
+          />
+          <div class="nft-item__collection-info">
+            <span class="nft-item__collection-label">Collection</span>
+            <span class="nft-item__collection-name"
+              >{{ nft.collection.name.capitalize() }}</span
+            >
+          </div>
+          <span class="nft-item__collection-arrow">→</span>
+        </a>
+        {% endif %}
+
+        <div class="nft-item__header">
+          <h1 class="nft-item__title">{{ nft.name.title() }}</h1>
+          {% if not current_user.is_anonymous %}
+          <button class="like-btn">
+            <svg
+              class="like-btn__icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+            <span class="like-btn__count">{{ nft.total_likes }}</span>
+          </button>
+          {% endif %}
+        </div>
+
+        <h1 class="nft-item__title"></h1>
+
+        {% if nft.creator.id == nft.owner.id %}
+        <div class="nft-item__creator">
+          <a href="{{ url_for('user.profile_page', user_id=nft.creator.id) }}">
+            <div class="nft-item__creator-avatar">
+              <img
+                src="{{ url_for('user.get_logo_image', user_id=nft.creator.id) }}"
+                alt="{{ nft.creator.username }} profile Logo"
+              />
+            </div>
+          </a>
+
+          <div class="nft-item__creator-info">
+            <span class="nft-item__creator-label">Creator&Owner</span>
+            <a
+              href="{{ url_for('user.profile_page', user_id=nft.creator.id) }}"
+            >
+              <span class="nft-item__creator-name"
+                >{{ nft.creator.display_name.capitalize() }}</span
+              >
+            </a>
+          </div>
+          <span class="nft-item__verified">✓</span>
+        </div>
+        {% else %}
+        <div class="nft-item__creator">
+          <a href="{{ url_for('user.profile_page', user_id=nft.creator.id) }}">
+            <div class="nft-item__creator-avatar">
+              <img
+                src="{{ url_for('user.get_logo_image', user_id=nft.creator.id) }}"
+                alt="{{ nft.creator.username }} profile Logo"
+              />
+            </div>
+          </a>
+
+          <div class="nft-item__creator-info">
+            <span class="nft-item__creator-label">Creator</span>
+            <a
+              href="{{ url_for('user.profile_page', user_id=nft.creator.id) }}"
+            >
+              <span class="nft-item__creator-name"
+                >{{ nft.creator.display_name.capitalize() }}</span
+              >
+            </a>
+          </div>
+          <span class="nft-item__verified">✓</span>
+        </div>
+
+        <div class="nft-item__creator">
+          <a href="{{ url_for('user.profile_page', user_id=nft.owner.id) }}">
+            <div class="nft-item__creator-avatar">
+              <img
+                src="{{ url_for('user.get_logo_image', user_id=nft.owner.id) }}"
+                alt="{{ nft.owner.username }} profile Logo"
+              />
+            </div>
+          </a>
+
+          <div class="nft-item__creator-info">
+            <span class="nft-item__creator-label">Owner</span>
+            <a href="{{ url_for('user.profile_page', user_id=nft.owner.id) }}">
+              <span class="nft-item__creator-name"
+                >{{ nft.owner_name.capitalize() }}</span
+              >
+            </a>
+          </div>
+          <span class="nft-item__verified">✓</span>
+        </div>
+        {% endif %}
+
+        <div class="nft-category">{{ nft.category.name }}</div>
+        <div class="nft-item__description">{{ nft.description }}</div>
+
+        <div class="nft-item__price-section">
+          <div class="nft-item__price-label">Current Price</div>
+          <div class="nft-item__price">{{ nft.price }} ETH</div>
+          <div class="nft-item__price-usd skeleton skeleton-text"></div>
+        </div>
+
+        <div class="nft-item__actions">
+          {% if current_user.is_anonymous %}
+          <a href='{{ url_for("main.login") }}'>
+            <button class="btn btn--primary">Buy</button>
+          </a>
+          <a href='{{ url_for("main.login") }}'>
+            <button class="btn btn--secondary">Make Offer</button>
+          </a>
+          {% else %} {% if (nft.creator_id != current_user.id and nft.owner_id
+          != current_user.id) or (nft.creator_id == current_user.id and
+          nft.owner_id != current_user.id)%} {% if nft.is_listed %}
+          <button class="btn btn--primary" id="buyEl">Buy</button>
+          <button class="btn btn--secondary" id="open-offer-modal">
+            Make Offer
+          </button>
+          {% else %} {% endif %} {% else %} {% if not nft.is_listed %}
+          <button class="btn btn--primary" id="listBtn">List</button>
+          {% else %}
+          <button class="btn btn--secondary" id="UnlistBtn">Unlist</button>
+          {% endif %} {% endif %} {% endif %}
+        </div>
+
+        <div class="nft-item__stats">
+          <div class="nft-item__stat">
+            <div class="nft-item__stat-value">{{ nft.total_views }}</div>
+            <div class="nft-item__stat-label">Views</div>
+          </div>
+          <div class="nft-item__stat">
+            <div class="nft-item__stat-value" id="likesStats">
+              {{ nft.total_likes }}
+            </div>
+            <div class="nft-item__stat-label">Likes</div>
+          </div>
+          <div class="nft-item__stat">
+            <div class="nft-item__stat-value">{{ nft.offers|count }}</div>
+            <div class="nft-item__stat-label">Offers</div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</section>
+{% if nft.creator_id != current_user.id or nft.owner_id != current_user.id %}
+<div class="modal" id="make-offer-modal" style="display: none">
+  <div class="modal__content">
+    <h2 class="modal__title">Make an Offer</h2>
+
+    <label class="modal__label" for="offer-amount">Offer Amount (ETH)</label>
+    <input
+      type="number"
+      id="offer-amount"
+      class="modal__input"
+      min="0"
+      step="0.0001"
+      placeholder="e.g. 1.5"
+    />
+
+    <label class="modal__label" for="offer-expiry">Expires In</label>
+    <select id="offer-expiry" class="modal__select">
+      <option value="1h">1 Hour</option>
+      <option value="6h">6 Hours</option>
+      <option value="24h">24 Hours</option>
+      <option value="3d">3 Days</option>
+      <option value="7d">7 Days</option>
+    </select>
+
+    <p class="errors hidden"></p>
+
+    <div class="modal__actions">
+      <button id="offer-submit-btn" class="modal__btn modal__btn--primary">
+        Send Offer
+      </button>
+      <button id="offer-cancel-btn" class="modal__btn">Cancel</button>
+    </div>
+  </div>
+</div>
+{% endif %} {% endblock content %}

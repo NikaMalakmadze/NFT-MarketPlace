@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyc
+
+# Virtual environments
+.venv/
+
+# Environment variables and secrets
+.env
+*.env
+
+# SQLite database
+*.db
+database/
+
+# temporarely ignore requirements
+requirements.txt
+
+# node modules
+node_modules/
+
+# css and js source map files
+*.map
+
+# source files
+src
+
+# private and public keys
+certs/
+
+# app folders
