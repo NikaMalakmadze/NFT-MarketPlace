@@ -15,7 +15,7 @@ __pycache__/
 database/
 
 # temporarely ignore requirements
-requirements.txt
+
 
 # node modules
 node_modules/
