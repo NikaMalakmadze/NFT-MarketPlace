@@ -13,21 +13,22 @@ FILES_FOLDER_NAME: str = 'uploads'
 APP_FILES_FOLDER_NAME: str = 'app-files'
 ALLOWED_EXTENSIONS: set[str] = {'png', 'jpg', 'jpeg', 'gif', 'jfif'}
 
-class DbSettings(BaseModel):
-    SQLALCHEMY_DATABASE_URI: str = Field(
-        default='sqlite:///:memory:',
-        env='DATABASE_URL'
-    )
+class DbSettings(BaseSettings):
+    SQLALCHEMY_DATABASE_URI: str = Field(alias='DATABASE_URL')
     SQLALCHEMY_TRACK_MODIFICATIONS: bool = False
 
     UPLOAD_FOLDER: Path = Field(
         default=BASE_DIR / "app" / FILES_FOLDER_NAME,
-        env='UPLOAD_FOLDER'
+        alias ='UPLOAD_FOLDER'
     )
     APP_FILES: Path = Field(
         default=BASE_DIR / "app" / APP_FILES_FOLDER_NAME,
-        env='APP_FILES'
+        alias ='APP_FILES'
     )
+
+    class Config:
+        env_file = "/etc/secrets/.env"
+        extra = "allow"
 
 class JWT(BaseModel):
     PRIVATE_KEY: Path = Path(os.getenv("JWT_PRIVATE_KEY_PATH", "/etc/secrets/private.pem"))
@@ -48,7 +49,7 @@ class Settings(BaseSettings):
     jwt: JWT = JWT()
     app: App = App()
 
-    model_config = SettingsConfigDict(env_file='.env', extra='allow')
+    model_config = SettingsConfigDict(env_file='/etc/secrets/.env', extra='allow')
 
 settings = Settings()
 
