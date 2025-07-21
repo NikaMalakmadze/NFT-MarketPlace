@@ -34,9 +34,6 @@ def index_page():
         NFT.query.filter_by(is_listed=True).order_by(NFT.created_at.desc()).limit(10).all()
     )
 
-    for nft in nfts:
-        nft.image_url = get_nft_image(nft.image_file)
-
     categories: list[Category] = Category.query.all()
 
     return render_template(
