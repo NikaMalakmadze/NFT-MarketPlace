@@ -10,9 +10,7 @@ __pycache__/
 .env
 *.env
 
-# SQLite database
-*.db
-database/
+database/migrate.py
 
 # temporarely ignore requirements
 

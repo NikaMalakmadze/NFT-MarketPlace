@@ -373,8 +373,7 @@ def drops_filter():
         query = (
             query.outerjoin(Offer)
             .group_by(NFT.id)
-            .order_by(func.count(Offer.id).desc()
-        )
+            .order_by(func.count(Offer.id).desc())
     )
     elif filters.sortBy == 2:
         query = query.order_by(NFT.price.asc())
