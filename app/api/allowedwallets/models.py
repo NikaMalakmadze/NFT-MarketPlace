@@ -5,7 +5,7 @@ from datetime import datetime
 from app.extensions import db
 
 class AllowedWallet(db.Model):
-    __tablename__ = 'allowedWallets'
+    __tablename__ = 'allowedwallets'
 
     id = Column(Integer, primary_key=True)
     name = Column(String(255), nullable=False, unique=True)

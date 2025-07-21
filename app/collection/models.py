@@ -21,7 +21,7 @@ class NFTCollection(db.Model):
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
     
     user_id: Mapped[int] = mapped_column(Integer, ForeignKey('users.id'))
-    category_id: Mapped[int] = mapped_column(Integer, ForeignKey('collectionCategories.id'), nullable=False)
+    category_id: Mapped[int] = mapped_column(Integer, ForeignKey('collectioncategories.id'), nullable=False)
 
     user = relationship('User', back_populates='collections')
     category = relationship('CollectionCategory', back_populates='collections')
@@ -70,7 +70,7 @@ class NFTCollection(db.Model):
         }
 
 class CollectionCategory(db.Model):
-    __tablename__ = 'collectionCategories'
+    __tablename__ = 'collectioncategories'
 
     id: Mapped[int] = mapped_column(Integer, nullable=False, primary_key=True)
     name: Mapped[str] = mapped_column(String(64), nullable=False, unique=True)
